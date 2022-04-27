@@ -14,6 +14,7 @@ class Wordle:
         self.max_attempts = self.__set_max_attempts(max_attempts)
         self.solution_partial_matches = []
         self.solution_perfect_matches = ["0", "1", "2", "3", "4"]
+        self.solution_no_matches = []
 
     def attempts_left(self):
         return self.max_attempts - len(self.attempts)
@@ -23,7 +24,7 @@ class Wordle:
         result = self.__check_solution(word)
         self.display_state()
 
-        if self.attempts_left() < 1:
+        if self.attempts_left() < 1 and not self.solved:
             self.__game_over(
                 colored(
                     f"Looks like you lose! The correct answer was {self.solution}! Thanks for playing :)",
@@ -34,8 +35,6 @@ class Wordle:
         return result
 
     def display_state(self):
-        print(f"partial_matches: {self.solution_partial_matches}")
-        print(f"perfect_matches: {self.solution_perfect_matches}")
         self.__print_guesses()
 
     def __validate_dictionary(self, path):
@@ -60,6 +59,12 @@ class Wordle:
         self.__add_partial_match_char(char)
         self.solution_perfect_matches[index] = char
 
+    def __add_no_match_char(self, char):
+        if char in self.solution_no_matches:
+            return True
+
+        self.solution_no_matches.append(char)
+
     def __build_guess_colors(self, guess):
         match_color = "green"
         partial_match_color = "yellow"
@@ -75,6 +80,8 @@ class Wordle:
                 self.__add_partial_match_char(c)
             else:
                 guess_colors.append(no_match_color)
+                self.__add_no_match_char(c)
+
 
         return guess_colors
 

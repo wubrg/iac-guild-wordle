@@ -28,6 +28,11 @@ class BrownAlgorithm(Algorithm):
 
     def partial_match(self, word):
         matches = []
+
+        for char in word:
+            if char in self.wordle.solution_no_matches:
+                return False
+
         for char in self.wordle.solution_partial_matches:
             if char in word:
                 matches.append(True)
@@ -37,7 +42,7 @@ class BrownAlgorithm(Algorithm):
         if len(matches) == 0:
             return False
 
-        if matches.count(True) == len(self.wordle.solution_partial_matches):
+        if matches.count(True) == len(np.unique(self.wordle.solution_partial_matches)):
             return True
 
         return False
