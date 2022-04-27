@@ -17,11 +17,11 @@ def play_wordle(game, algorithm):
             An empty string will let the chosen algorithm make its best guess.
             """
         )
-        print(f'your guess is: {guess}.')
         if guess == "":
-            game.guess(algorithm.suggest)
-        else:
-            game.guess(guess)
+            guess = algorithm.suggest()
+
+        print(f"your guess is: {guess}.")
+        game.guess(guess)
 
 
 def create_game(attempts, dictionary, solution=""):

@@ -1,3 +1,6 @@
+from termcolor import colored
+
+
 class Wordle:
     def __init__(self, max_attempts, dictionary, solution=""):
         self.attempts = []
@@ -10,6 +13,11 @@ class Wordle:
 
     def guess(self, word):
         word = word.lower()
+
+        if self.check_if_already_guessed(word):
+            return False
+
+        self.attempts.append(word)
         result = self.__check_solution(word)
         self.display_state()
 
@@ -18,11 +26,46 @@ class Wordle:
 
         return result
 
-    def display_state(self):
-        self.__print_results()
+    def check_if_already_guessed(self, word):
+        if word in self.attempts:
+            print(f"You already tried guessing {word}... Please try again")
+            self.display_state()
+            return True
+        return False
 
-    def __print_results(self):
-        print(self.attempts)
+    def display_state(self):
+        self.__print_guesses()
+
+    def __build_guess_colors(self, guess):
+        match_color = "green"
+        partial_match_color = "yellow"
+        no_match_color = "grey"
+        guess_colors = []
+        for i, c in enumerate(guess):
+            if guess[i] == self.solution[i]:
+                guess_colors.append(match_color)
+            elif guess[i] in self.solution:
+                guess_colors.append(partial_match_color)
+            else:
+                guess_colors.append(no_match_color)
+
+        return guess_colors
+
+    def __print_guess(self, guess):
+        colors = self.__build_guess_colors(guess)
+
+        guess_string = (
+            colored(guess[0], colors[0])
+            + colored(guess[1], colors[1])
+            + colored(guess[2], colors[2])
+            + colored(guess[3], colors[3])
+            + colored(guess[4], colors[4])
+        )
+        print(guess_string)
+
+    def __print_guesses(self):
+        for attempt in self.attempts:
+            self.__print_guess(attempt)
 
     def __set_max_attempts(self, num_attempts):
         max = int(num_attempts)
@@ -50,13 +93,9 @@ class Wordle:
     def __check_solution(self, guess):
         # Check matching characters then validate if answer is correct
         if guess == self.solution:
+            self.solved = True
             self.__game_over("You Win! Thanks for playing :)")
 
-        if guess in self.attempts:
-            print(f"You already tried guessing {guess}... Please try again")
-            return False
-
-        self.attempts.append(guess)
         return False
 
     def __game_over(self, message):
