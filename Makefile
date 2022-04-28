@@ -1,5 +1,7 @@
 
 init:
+	brew install pip3
+	brew install python3
 	brew install pyenv
 	chmod +x ./play_wordle.py
 

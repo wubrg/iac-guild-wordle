@@ -17,12 +17,9 @@ def play_wordle(game, algorithm, automated=False):
         if automated:
             guess = ""
         else:
-            guess = input(
-                """
-                Please input your next guess.
-                An empty string will let the chosen algorithm make its best guess.
-                """
-            )
+            print("Please input your next guess.")
+            print("An empty string will let the chosen algorithm make its best guess.")
+            guess = input()
 
         if guess == "":
             guess = algorithm.suggest()
@@ -39,7 +36,6 @@ if __name__ == "__main__":
     algorithm = "browny"
     automated = False
     dict = "/Users/adamwieberg/Downloads/five-letter-words-no-names.txt"
-    # solution = 'blast'
-    game = create_game(attempts, dict, "grass")
+    game = create_game(attempts, dict)
     assistant = load_algorithm(algorithm, game)
     play_wordle(game, assistant, automated)

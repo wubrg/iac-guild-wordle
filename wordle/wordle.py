@@ -5,10 +5,10 @@ import random
 
 
 class Wordle:
-    def __init__(self, max_attempts, dictionary, solution=""):
+    def __init__(self, max_attempts, dictionary_file, solution=""):
         self.attempts = []
         self.solved = False
-        self.dictionary_file = dictionary
+        self.dictionary_file = dictionary_file
         self.dictionary = self.__validate_dictionary(self.dictionary_file)
         self.solution = self.__generate_solution(solution)
         self.max_attempts = self.__set_max_attempts(max_attempts)
@@ -81,7 +81,6 @@ class Wordle:
             else:
                 guess_colors.append(no_match_color)
                 self.__add_no_match_char(c)
-
 
         return guess_colors
 
